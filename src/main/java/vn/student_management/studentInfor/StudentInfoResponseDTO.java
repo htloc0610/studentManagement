@@ -10,6 +10,4 @@ public class StudentInfoResponseDTO {
     private String address;
     private Double averageScore;
     private LocalDateTime dateOfBirth;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

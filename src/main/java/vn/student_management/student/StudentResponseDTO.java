@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 public class StudentResponseDTO {
     private Integer studentId;
     private String studentName;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     private StudentInfoResponseDTO studentInfo;
 }
