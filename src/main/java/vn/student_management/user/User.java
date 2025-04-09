@@ -23,10 +23,10 @@ public class User {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "user_name", length = 20, nullable = false)
+    @Column(name = "user_name", length = 20, nullable = false, unique = true)
     private String userName;
 
-    @Column(name = "password", length = 15, nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @CreationTimestamp

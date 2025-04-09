@@ -13,13 +13,11 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Xử lý Exception chung chung
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleAllExceptions(Exception ex) {
         return ResponseBuilder.build(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), null);
     }
 
-    // Xử lý lỗi request không hợp lệ (ví dụ @Valid fail)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Object>> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -30,7 +28,6 @@ public class GlobalExceptionHandler {
         return ResponseBuilder.build(HttpStatus.BAD_REQUEST, "Validation failed", errors);
     }
 
-    // Bạn có thể thêm Exception riêng theo ý muốn, ví dụ:
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Object>> handleIllegalArgument(IllegalArgumentException ex) {
         return ResponseBuilder.build(HttpStatus.BAD_REQUEST, ex.getMessage(), null);
