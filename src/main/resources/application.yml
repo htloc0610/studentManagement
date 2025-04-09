@@ -23,6 +23,6 @@ spring:
 
 jwt:
   secret: your_secret_key_should_be_long_enough_123456
-  expiration: 60000 # 1 ngày (ms)
-  refresh-threshold: 60000 # 1 ngày (ms)
+  expiration: 86400000 # 1 ngày (ms)
+  refresh-threshold: 86400000 # 1 ngày (ms)
 
