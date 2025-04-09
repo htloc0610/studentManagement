@@ -15,4 +15,13 @@ public class StudentService {
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
+
+    public Student getStudentById(int id) {
+        return studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+    }
+    
+    public Student createStudent(Student student) {
+        return studentRepository.save(student);
+    }
 }
