@@ -1,16 +1,14 @@
 package vn.student_management.student;
 
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.*;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.*;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class StudentService {
-    @Autowired
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
@@ -20,8 +18,21 @@ public class StudentService {
         return studentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
     }
-    
+
     public Student createStudent(Student student) {
         return studentRepository.save(student);
+    }
+
+    public Student updateStudent(int id, Student student) {
+        Student existingStudent = getStudentById(id);
+        existingStudent.setStudentName(student.getStudentName());
+        existingStudent.setStudentCode(student.getStudentCode());
+        existingStudent.setStudentInfo(student.getStudentInfo());
+        return studentRepository.save(existingStudent);
+    }
+
+    public void deleteStudent(int id) {
+        Student student = getStudentById(id);
+        studentRepository.delete(student);
     }
 }

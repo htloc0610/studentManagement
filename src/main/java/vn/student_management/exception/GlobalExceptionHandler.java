@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
     // Xử lý Exception chung chung
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleAllExceptions(Exception ex) {
-        return ResponseBuilder.build(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        return ResponseBuilder.build(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), null);
     }
 
     // Xử lý lỗi request không hợp lệ (ví dụ @Valid fail)
@@ -33,6 +33,6 @@ public class GlobalExceptionHandler {
     // Bạn có thể thêm Exception riêng theo ý muốn, ví dụ:
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Object>> handleIllegalArgument(IllegalArgumentException ex) {
-        return ResponseBuilder.build(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return ResponseBuilder.build(HttpStatus.BAD_REQUEST, ex.getMessage(), null);
     }
 }

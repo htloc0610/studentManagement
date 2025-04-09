@@ -16,5 +16,12 @@ public interface StudentMapper {
 
     StudentInfo toStudentInfo(StudentInfoRequestDTO request);
     StudentInfoResponseDTO toStudentInfoResponse(StudentInfo info);
+
+    @AfterMapping
+    default void linkStudentInfo(@MappingTarget Student student) {
+        if (student.getStudentInfo() != null) {
+            student.getStudentInfo().setStudent(student);
+        }
+    }
 }
 

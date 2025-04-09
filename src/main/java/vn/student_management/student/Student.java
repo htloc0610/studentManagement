@@ -24,7 +24,7 @@ public class Student {
     @Column(name = "student_name", length = 20, nullable = false)
     private String studentName;
 
-    @Column(name = "student_code", length = 10)
+    @Column(name = "student_code", length = 10, unique = true)
     private String studentCode;
 
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)

@@ -8,14 +8,11 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
     private int code;
     private String message;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
-    public ApiResponse(int code, String message) {
-        this.code = code;
-        this.message = message;
-    }
 }
