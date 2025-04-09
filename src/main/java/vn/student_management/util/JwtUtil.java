@@ -2,6 +2,7 @@ package vn.student_management.util;
 
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
@@ -9,9 +10,15 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private final String SECRET_KEY = "your_secret_key_should_be_long_enough_123456";
-    private final long EXPIRATION_TIME = 86400000; // 1 ngày
-    private final long REFRESH_THRESHOLD = 86400000; // 1 ngày
+
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
+
+    @Value("${jwt.expiration}")
+    private long EXPIRATION_TIME;
+
+    @Value("${jwt.refresh-threshold}")
+    private long REFRESH_THRESHOLD;
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
