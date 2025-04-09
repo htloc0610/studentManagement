@@ -1,5 +1,6 @@
 package vn.student_management.auth;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,4 +28,18 @@ public class AuthService {
 
         return new AuthResponseDTO(token);
     }
+
+    public AuthResponseDTO refreshToken(RefreshTokenRequestDTO request) {
+        String token = request.getToken();
+
+        if (!jwtUtil.validateToken(token) && !jwtUtil.shouldRefreshToken(token)) {
+            throw new RuntimeException("Token expired too long, cannot refresh");
+        }
+
+        String username = jwtUtil.extractUsernameHandleExpired(token);
+        String newToken = jwtUtil.generateToken(username);
+
+        return new AuthResponseDTO(newToken);
+    }
+
 }

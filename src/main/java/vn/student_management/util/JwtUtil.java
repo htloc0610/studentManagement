@@ -1,8 +1,6 @@
 package vn.student_management.util;
 
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
 
@@ -13,6 +11,7 @@ import java.util.Date;
 public class JwtUtil {
     private final String SECRET_KEY = "your_secret_key_should_be_long_enough_123456";
     private final long EXPIRATION_TIME = 86400000; // 1 ngày
+    private final long REFRESH_THRESHOLD = 86400000; // 1 ngày
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
@@ -42,6 +41,39 @@ public class JwtUtil {
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
+        }
+    }
+
+    public boolean shouldRefreshToken(String token) {
+        try {
+            Date expiration = extractExpiration(token);
+            long diffMillis = System.currentTimeMillis() - expiration.getTime();
+            // Nếu token hết hạn chưa quá 1 ngày (86400000ms) thì vẫn được refresh
+            return diffMillis >= 0 && diffMillis <= REFRESH_THRESHOLD;
+        } catch (ExpiredJwtException e) {
+            long expiredAt = e.getClaims().getExpiration().getTime();
+            long diffMillis = System.currentTimeMillis() - expiredAt;
+            return diffMillis <= REFRESH_THRESHOLD;
+        }
+    }
+
+    public Date extractExpiration(String token) {
+        return getClaims(token).getExpiration();
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public String extractUsernameHandleExpired(String token) {
+        try {
+            return extractUsername(token);
+        } catch (ExpiredJwtException e) {
+            return e.getClaims().getSubject();
         }
     }
 

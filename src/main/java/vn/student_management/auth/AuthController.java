@@ -23,4 +23,10 @@ public class AuthController {
         AuthResponseDTO response = authService.login(request);
         return ResponseBuilder.build(HttpStatus.OK, "Login successfully", response);
     }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<ApiResponse<AuthResponseDTO>> refreshToken(@RequestBody RefreshTokenRequestDTO request) {
+        AuthResponseDTO response = authService.refreshToken(request);
+        return ResponseBuilder.build(HttpStatus.OK, "Refresh token successfully", response);
+    }
 }
