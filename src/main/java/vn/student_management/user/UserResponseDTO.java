@@ -6,6 +6,6 @@ import lombok.*;
 @Setter
 public class UserResponseDTO {
     private Integer userId;
-    private String userName;
+    private String username;
     private String password;
 }

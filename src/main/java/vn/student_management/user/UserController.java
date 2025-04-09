@@ -23,12 +23,4 @@ public class UserController {
         return ResponseBuilder.build(HttpStatus.OK, "Get successfully user", userMapper.toUserResponse(user));
     }
 
-
-
-    @PostMapping
-    public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@RequestBody UserRequestDTO request) {
-        User user = userMapper.toUser(request);
-        User savedUser = userService.saveUser(user);
-        return ResponseBuilder.build(HttpStatus.CREATED, "User created successfully", userMapper.toUserResponse(savedUser));
-    }
 }

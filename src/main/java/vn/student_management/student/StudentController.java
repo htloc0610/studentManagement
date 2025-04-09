@@ -1,5 +1,6 @@
 package vn.student_management.student;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<StudentResponseDTO>> createStudent(@RequestBody StudentRequestDTO studentRequest) {
+    public ResponseEntity<ApiResponse<StudentResponseDTO>> createStudent(@RequestBody @Valid StudentRequestDTO studentRequest) {
         Student student = studentMapper.toStudent(studentRequest);
         Student createdStudent = studentService.createStudent(student);
         StudentResponseDTO studentResponse = studentMapper.toStudentResponse(createdStudent);
