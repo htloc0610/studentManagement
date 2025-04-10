@@ -7,5 +7,4 @@ import lombok.*;
 public class UserResponseDTO {
     private Integer userId;
     private String username;
-    private String password;
 }

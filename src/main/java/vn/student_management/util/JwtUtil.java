@@ -1,6 +1,8 @@
 package vn.student_management.util;
 
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
 import io.jsonwebtoken.security.Keys;
@@ -19,6 +21,9 @@ public class JwtUtil {
 
     @Value("${jwt.refresh-threshold}")
     private long REFRESH_THRESHOLD;
+
+    @Autowired
+    private HttpServletRequest request;
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
@@ -97,5 +102,13 @@ public class JwtUtil {
                 .getBody()
                 .getExpiration();
         return expirationDate.before(new Date());
+    }
+
+    public String getCurrentToken() {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7); // cắt "Bearer " để lấy token
+        }
+        return null;
     }
 }
