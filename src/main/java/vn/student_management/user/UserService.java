@@ -22,4 +22,9 @@ public class UserService {
     public User findUserByUsername(String username) {
         return userRepository.findByUserName(username).orElse(null);
     }
+
+    public boolean exitUserByUsername(String username) {
+        return userRepository.findByUserName(username).isPresent();
+    }
+
 }

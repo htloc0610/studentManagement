@@ -3,8 +3,7 @@ package vn.student_management.user;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 public class UserRequestDTO {
     @NotBlank(message = "Username is required")
     @Size(max = 20, message = "Username must be at most 20 characters")

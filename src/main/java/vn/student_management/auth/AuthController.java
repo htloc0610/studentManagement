@@ -35,6 +35,9 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@RequestBody @Valid UserRequestDTO request) {
+        if (userService.exitUserByUsername(request.getUsername())) {
+            return ResponseBuilder.build(HttpStatus.CONFLICT, "Username already exists", null);
+        }
         User user = userMapper.toUser(request);
         User savedUser = userService.saveUser(user);
         return ResponseBuilder.build(HttpStatus.CREATED, "User created successfully", userMapper.toUserResponse(savedUser));
