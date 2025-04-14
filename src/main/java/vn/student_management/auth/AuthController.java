@@ -10,7 +10,6 @@ import vn.student_management.APIReponse.ApiResponse;
 import vn.student_management.APIReponse.ResponseBuilder;
 import vn.student_management.mapper.UserMapper;
 import vn.student_management.user.*;
-import vn.student_management.util.JwtUtil;
 
 @RestController
 @RequestMapping("/auth")

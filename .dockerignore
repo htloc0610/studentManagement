@@ -1,0 +1,9 @@
+# Ignore Maven wrapper files and build folders
+.mvn
+target/
+*.iml
+.idea/
+.DS_Store
+
+# Ignore source files that aren't needed for the build
+src/test/
