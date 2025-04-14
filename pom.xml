@@ -107,6 +107,20 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
 
+        <!-- Spring Batch cho batch processing -->
+        <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-core</artifactId>
+            <version>5.0.0</version>
+        </dependency>
+
+        <!-- OpenCSV để ghi ra file CSV -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.7.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
