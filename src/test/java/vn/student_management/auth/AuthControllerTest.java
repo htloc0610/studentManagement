@@ -7,9 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import vn.student_management.exception.AuthenticationException;
+import vn.student_management.exception.GlobalExceptionHandler;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -31,7 +32,10 @@ class AuthControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(authController)
+                .setControllerAdvice(new GlobalExceptionHandler()) // Đưa exception handler vào đây
+                .build();
         objectMapper = new ObjectMapper();
     }
 
@@ -62,18 +66,17 @@ class AuthControllerTest {
         loginRequestDTO.setUsername("testuser@gmail.com");
         loginRequestDTO.setPassword("wrongpassword");
 
-        // Giả lập service ném ra AuthenticationException
+        // Mock: authService ném ra BadCredentialsException
         when(authService.login(any(LoginRequestDTO.class)))
-                .thenThrow(new AuthenticationException("Username or password is incorrect"));
+                .thenThrow(new BadCredentialsException("Username or password is incorrect"));
 
         // Act & Assert
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginRequestDTO)))
                 .andExpect(status().isUnauthorized()) // HTTP 401
-                .andExpect(jsonPath("$.status").value("UNAUTHORIZED"))
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value("Username or password is incorrect"))
                 .andExpect(jsonPath("$.data").doesNotExist());
     }
-
 }
