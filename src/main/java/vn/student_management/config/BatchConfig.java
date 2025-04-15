@@ -2,19 +2,16 @@ package vn.student_management.config;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
-import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
-import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
+import org.springframework.batch.item.file.transform.*;
 import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 import vn.student_management.student.Student;
@@ -27,12 +24,6 @@ public class BatchConfig {
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    private final UserRepository userRepository;
-
-    public BatchConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     // Định nghĩa writer cho user
     @Bean
