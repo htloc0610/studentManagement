@@ -1,6 +1,5 @@
 package vn.student_management.runner;
 
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -14,10 +13,14 @@ public class StartupJobRunner implements ApplicationRunner {
 
     private final JobLauncher jobLauncher;
     private final Job exportUserJob;
+    private final Job exportStudentJob;
+    private final Job exportStudentInfoJob;
 
-    public StartupJobRunner(JobLauncher jobLauncher, Job exportUserJob) {
+    public StartupJobRunner(JobLauncher jobLauncher, Job exportUserJob, Job exportStudentJob, Job exportStudentInfoJob) {
         this.jobLauncher = jobLauncher;
         this.exportUserJob = exportUserJob;
+        this.exportStudentJob = exportStudentJob;
+        this.exportStudentInfoJob = exportStudentInfoJob;
     }
 
     @Override
@@ -27,7 +30,9 @@ public class StartupJobRunner implements ApplicationRunner {
                 .addLong("JobID", System.currentTimeMillis())
                 .toJobParameters();
 
-        // Khởi chạy job exportUserJob với các tham số đã tạo
+        // Khởi chạy các job
         jobLauncher.run(exportUserJob, params);
+        jobLauncher.run(exportStudentJob, params);
+        jobLauncher.run(exportStudentInfoJob, params);
     }
 }
