@@ -109,10 +109,10 @@
 
         <!-- Spring Batch cho batch processing -->
         <dependency>
-            <groupId>org.springframework.batch</groupId>
-            <artifactId>spring-batch-core</artifactId>
-            <version>5.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-batch</artifactId>
         </dependency>
+
 
         <!-- OpenCSV để ghi ra file CSV -->
         <dependency>
