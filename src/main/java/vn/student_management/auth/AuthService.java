@@ -3,6 +3,7 @@ package vn.student_management.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import vn.student_management.exception.AuthenticationException;
 import vn.student_management.user.User;
 import vn.student_management.user.UserRepository;
 import vn.student_management.util.JwtUtil;
@@ -20,7 +21,7 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Username or password is incorrect");
+            throw new AuthenticationException("Username or password is incorrect");
         }
 
         String token = jwtUtil.generateToken(user.getUserName());
