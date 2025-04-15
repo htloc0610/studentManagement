@@ -39,11 +39,6 @@ public class GlobalExceptionHandler {
         return ResponseBuilder.build(HttpStatus.BAD_REQUEST, ex.getMessage(), null);
     }
 
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiResponse<Object>> handleAuthenticationException(AuthenticationException ex) {
-        return ResponseBuilder.build(HttpStatus.UNAUTHORIZED, ex.getMessage(), null);
-    }
-
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiResponse<Object>> handleBadCredentials(BadCredentialsException ex) {
         return ResponseBuilder.build(HttpStatus.UNAUTHORIZED, ex.getMessage(), null);
