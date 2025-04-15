@@ -24,6 +24,8 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: UTC
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
 
   batch:
     job:
@@ -37,12 +39,7 @@ jwt:
   expiration: 86400000 # 1 ngày (ms)
   refresh-threshold: 86400000 # 1 ngày (ms)
 
-#springdoc:
-#  api-docs:
-#    path: /api-docs
-#  swagger-ui:
-#    path: /swagger-ui.html
-#    operations-sorter: alpha
-#    tags-sorter: alpha
-#    display-request-duration: true
+
+
+
 

@@ -1,6 +1,7 @@
 package vn.student_management.studentInfor;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -19,5 +20,6 @@ public class StudentInfoRequestDTO {
 
     @NotNull(message = "Date of birth is required")
     @PastOrPresent(message = "Date of birth cannot be in the future")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateOfBirth;
 }
