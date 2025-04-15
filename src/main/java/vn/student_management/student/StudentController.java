@@ -1,5 +1,9 @@
 package vn.student_management.student;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +27,14 @@ public class StudentController {
     private final StudentMapper studentMapper;
 
     @GetMapping
+    @Operation(summary = "Get all students", description = "Retrieve a list of all students from the system")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Successfully retrieved student list",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = StudentResponseDTO.class)))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "No students found",
+                    content = @Content(mediaType = "application/json"))
+    })
     public ResponseEntity<ApiResponse<List<StudentResponseDTO>>> getAllStudents() {
         List<StudentResponseDTO> students = studentService.getAllStudents()
                 .stream()
@@ -45,6 +57,14 @@ public class StudentController {
     }
 
     @PostMapping
+    @Operation(summary = "Create a new student", description = "Create a new student in the system")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Student created successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = StudentResponseDTO.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request",
+                    content = @Content(mediaType = "application/json"))
+    })
     public ResponseEntity<ApiResponse<StudentResponseDTO>> createStudent(@RequestBody @Valid StudentRequestDTO studentRequest) {
         Student student = studentMapper.toStudent(studentRequest);
         Student createdStudent = studentService.createStudent(student);
@@ -54,6 +74,16 @@ public class StudentController {
     }
 
     @PutMapping("/{studentId}")
+    @Operation(summary = "Update student", description = "Update an existing student's information")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Student updated successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = StudentResponseDTO.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Student not found",
+                    content = @Content(mediaType = "application/json")),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request",
+                    content = @Content(mediaType = "application/json"))
+    })
     public ResponseEntity<ApiResponse<StudentResponseDTO>> updateStudent(
             @PathVariable int studentId,
             @RequestBody StudentRequestDTO studentRequest) {
@@ -76,6 +106,13 @@ public class StudentController {
     }
 
     @DeleteMapping("/{studentId}")
+    @Operation(summary = "Delete student", description = "Delete a student from the system by ID")
+    @io.swagger.v3.oas.annotations.responses.ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Student deleted successfully",
+                    content = @Content(mediaType = "application/json")),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Student not found",
+                    content = @Content(mediaType = "application/json"))
+    })
     public ResponseEntity<ApiResponse<Void>> deleteStudent(@PathVariable int studentId) {
         studentService.deleteStudent(studentId);
         return ResponseBuilder.build(HttpStatus.OK, "Delete successfully student", null);
