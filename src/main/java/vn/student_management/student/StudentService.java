@@ -1,5 +1,6 @@
 package vn.student_management.student;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.*;
 
@@ -16,7 +17,7 @@ public class StudentService {
 
     public Student getStudentById(int id) {
         return studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Student not found"));
     }
 
     public Student createStudent(Student student) {

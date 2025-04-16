@@ -1,6 +1,7 @@
 package vn.student_management.student;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -94,6 +95,19 @@ class StudentControllerTest {
     }
 
     @Test
+    void testGetStudentById_NotFound() throws Exception {
+        int studentId = 999;
+
+        // Giả lập service ném ra exception khi không tìm thấy student
+        when(studentService.getStudentById(studentId)).thenThrow(new EntityNotFoundException("Student not found"));
+
+        mockMvc.perform(get("/students/{id}", studentId))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Student not found"));
+    }
+
+
+    @Test
     void testCreateStudent_Success() throws Exception {
         StudentRequestDTO request = new StudentRequestDTO();
         request.setStudentName("John");
@@ -120,6 +134,25 @@ class StudentControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.studentId").value(1));
     }
+
+    @Test
+    void testCreateStudent_Fail_MissingStudentCode() throws Exception {
+        // Tạo request DTO nhưng thiếu studentCode (giả sử là required)
+        StudentRequestDTO request = new StudentRequestDTO();
+        request.setStudentName("John");
+
+        StudentInfoRequestDTO infoRequest = new StudentInfoRequestDTO();
+        infoRequest.setAddress("Hanoi");
+        infoRequest.setAverageScore(8.5);
+        infoRequest.setDateOfBirth(LocalDateTime.of(2000, 1, 1, 0, 0));
+        request.setStudentInfo(infoRequest);
+
+        mockMvc.perform(post("/students")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest()); // 400 nếu validate fail
+    }
+
 
     @Test
     void testUpdateStudent_Success() throws Exception {
@@ -156,6 +189,30 @@ class StudentControllerTest {
     }
 
     @Test
+    void testUpdateStudent_Fail_StudentNotFound() throws Exception {
+        int studentId = 999;
+
+        StudentRequestDTO request = new StudentRequestDTO();
+        request.setStudentName("Updated");
+        request.setStudentCode("U123");
+        StudentInfoRequestDTO infoRequest = new StudentInfoRequestDTO();
+        infoRequest.setAddress("New Address");
+        infoRequest.setAverageScore(9.0);
+        infoRequest.setDateOfBirth(LocalDateTime.of(2001, 2, 2, 0, 0));
+        request.setStudentInfo(infoRequest);
+
+        // Giả lập service ném lỗi khi không tìm thấy student
+        when(studentService.getStudentById(studentId)).thenThrow(new EntityNotFoundException("Student not found"));
+
+        mockMvc.perform(put("/students/{id}", studentId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound()) // HTTP 404
+                .andExpect(jsonPath("$.message").value("Student not found")); // Nếu có field message trong ApiResponse
+    }
+
+
+    @Test
     void testDeleteStudent_Success() throws Exception {
         int studentId = 1;
 
@@ -165,4 +222,16 @@ class StudentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Delete successfully student"));
     }
+
+    @Test
+    void testDeleteStudent_Fail_StudentNotFound() throws Exception {
+        int studentId = 999;
+
+        doThrow(new EntityNotFoundException("Student not found")).when(studentService).deleteStudent(studentId);
+
+        mockMvc.perform(delete("/students/{id}", studentId))
+                .andExpect(status().isNotFound()) // HTTP 404
+                .andExpect(jsonPath("$.message").value("Student not found")); // Nếu có field message trong ApiResponse
+    }
+
 }
