@@ -49,4 +49,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Object>> handleEntityNotFound(EntityNotFoundException ex) {
         return ResponseBuilder.build(HttpStatus.NOT_FOUND, ex.getMessage(), null);
     }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<ApiResponse<Object>> handleTokenExpired(TokenExpiredException ex) {
+        return ResponseBuilder.build(HttpStatus.UNAUTHORIZED, ex.getMessage(), null);
+    }
 }

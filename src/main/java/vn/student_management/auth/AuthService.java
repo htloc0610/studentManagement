@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import vn.student_management.exception.TokenExpiredException;
 import vn.student_management.user.User;
 import vn.student_management.user.UserRepository;
 import vn.student_management.util.JwtUtil;
@@ -33,7 +34,7 @@ public class AuthService {
         String token = request.getToken();
 
         if (!jwtUtil.validateToken(token) && !jwtUtil.shouldRefreshToken(token)) {
-            throw new RuntimeException("Token expired too long, cannot refresh");
+            throw new TokenExpiredException("Token expired too long, cannot refresh");
         }
 
         String username = jwtUtil.extractUsernameHandleExpired(token);
