@@ -17,7 +17,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import vn.student_management.student.Student;
 import vn.student_management.studentInfor.StudentInfo;
 import vn.student_management.user.User;
-import vn.student_management.user.UserRepository;
 
 @Configuration
 public class BatchConfig {
